@@ -1,0 +1,624 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HW8Fall2017</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        
+        <link rel='stylesheet prefetch' href='https://cdn.gitcdn.xyz/cdn/angular/bower-material/v1.0.0-rc4/angular-material.css'>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
+        <script src="https://code.highcharts.com/stock/highstock.js"></script>
+        <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <link rel='stylesheet' href='https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.5/angular-material.css'>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
+  
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src = 'angu.js'></script>
+
+    </head>
+    <body ng-app="MdAutocompleteBugApp" ng-controller="MdAutocompleteBugController as vm"  ng-cloak>
+        <script>
+
+            window.fbAsyncInit = function() {
+                FB.init({
+                  appId            : 297941840700598,
+                  xfbml            : true,
+                  version          : 'v2.11'
+                });
+                FB.AppEvents.logPageView();
+              };
+
+              (function(d, s, id){
+                 var js, fjs = d.getElementsByTagName(s)[0];
+                 if (d.getElementById(id)) {return;}
+                 js = d.createElement(s); js.id = id;
+                 js.src = "//connect.facebook.net/en_US/sdk.js";
+                 fjs.parentNode.insertBefore(js, fjs);
+               }(document, 'script', 'facebook-jssdk'));
+
+
+        </script>
+
+
+        <div class = "container">
+            <div class = "well well-lg">
+                <div class="text-center">
+                    <h3 >Stock Market Search</h3>
+                </div>
+                
+                   
+                <div class = "row " >
+                    <md-content class="md-padding">
+                        <form role="form" id="form1" ng-submit="$event.preventDefault()" name="searchForm">
+
+                            <div class = "form-group">
+
+                                <section class="col-md-3 col-lg-3">
+                                    <label id = "input_l" >Enter Stock Ticker Symbol:</label>
+                                </section>
+                                <section class="col-md-6 col-lg-6">
+                                    <md-autocomplete md-input-name = "autocompleteField" md-selected-item="selectedItem" md-search-text="searchText" md-items="item in vm.getMatches(searchText)" md-item-text="item.Symbol" placeholder="e.g. AAPL" md-no-cache="vm.noCache" md-clear-button="false" md-input-id= "auto">
+                                        <md-item-template>
+                                            <span md-highlight-text="searchText">{{item.Symbol}} - </span>
+                                            <span md-highlight-text="searchText">{{item.Name}}</span>
+                                            <span md-highlight-text="searchText"> ( {{item.Exchange}} )</span>
+                                        </md-item-template>
+                                        <md-not-found>
+                                            No matches found.
+                                        </md-not-found>
+
+                                    </md-autocomplete>
+
+                                        <div ng-show = "validate_error"> 
+                                            <span style = "color:red;">Please enter a valid symbol!</span>
+                                        </div>
+
+                                </section>
+                            </div>
+                            
+
+
+                            <div class="form-group">
+                              <section class="col-md-3 col-lg-3">
+                                <button type="submit" class="btn btn-primary get-quote" id="get_quote" ng-click='change2(selectedItem);'>
+                                    <span id="search_button_text">
+                                        <span class="glyphicon glyphicon-search"></span> Get Quote
+                                    </span>
+                                </button>
+                                <button type="button" class="btn btn-default grays" id="clears" ng-click="clear()">
+                                    <span id="clear_button_text">
+                                        <span class="glyphicon glyphicon-refresh" ></span> Clear
+                                    </span>
+                                </button>
+                              </section>
+                            </div>
+                      
+                        </form>
+                    </md-content>
+                </div>
+            
+            </div>
+
+        </div>
+
+
+
+        <div class="container" id="line">
+            <section class="row">
+                <div id = "one_line"></div>
+            </section>  
+        </div>
+
+
+        <div class="container view-page view-1" ng-model = "slides"  ng-show = "vm.current">
+            <div class = "well well-lg ">
+                <div class="panel panel-default">
+                    <div class="panel-heading row">
+                        
+
+                        <div class="row" id="panel_heading_row">
+
+                                        <div class="pull-left">
+                                          <span class="h5">Favorite List</span>
+                                        </div>
+                                        <div >
+                                            <span class="pull-right">
+                                                
+                                                    <button type="button" class="btn btn-default grays" ng-click="change1(selectedItem)">                                                 
+                                                            <span class="glyphicon glyphicon-chevron-right"></span>                                                 
+                                                    </button>
+                                                
+                                            </span>
+                                            <span class="pull-right">
+                                                
+                                                    <button type="button" class="btn btn-default grays" id="refresh_btn" ng-click = "refresh()">
+                                                        <span class="glyphicon glyphicon-refresh"></span>
+                                                    </button>
+                                               
+                                            </span>
+                                           
+                                                <span class = "pull-right">
+            
+
+                                                    <input type="checkbox" data-toggle="toggle" id="refresh_tog" >
+                                                     
+                                                </span>
+                                            
+                                            <span class="pull-right hidden-xs" style="margin-right: 10px;">Automatic Refresh: </span>
+                                        </div>
+
+                                    </div>
+
+                    
+                </div>
+                    <div class="panel-body">
+                        <div class = "row">
+                            <div class="col-md-4 form-group form-inline">
+                                <!--<label for = "sort_by"> Sort by &nbsp;&nbsp;&nbsp;&nbsp;</label> -->
+                                
+                                <span class = "col-md-4 col-xs-12">
+                                    <label for = "sorts" >Sort by</label>
+                                </span>
+                                
+                                <span class = "col-md-7 col-xs-12">
+                                    <select class = "select form-control"  id = "sorts" ng-init="vm.orderProp='Time'" ng-model="vm.orderProp" >
+                                        <option value="Time" >Default</option>
+                                        <option value = "Symbol">Symbol</option>
+                                        <option value = "Price">Price</option>
+                                        <option value = "Change">Change</option>
+                                        <option value = "ChangeP">Change Percent</option>
+                                        <option value = "Volume">Volume</option>
+                                    </select>
+
+
+
+
+                                </span>
+                                
+
+                                    
+                                        
+      
+                                    
+                                
+                                    
+                            </div>
+
+                            <div class="form-group form-inline col-md-4">
+
+                                <span class = "col-md-4 col-xs-12">
+                                <!--<label for = "order"> Order &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label> -->
+                                    <label for = "orders" >Order</label>
+                                 </span>
+                                <span class = "col-md-7 col-xs-12">
+                                    <select class = "select form-control "  id = "orders" ng-init="vm.orders='asc'" ng-if = "vm.orderProp == 'Time'" disabled ng-model = "vm.orders">
+                                        <option value = "des">Descending</option>
+                                        <option value = "asc">Ascending</option>
+                                    </select>
+                                    <select class = "select form-control "  id = "orders" ng-init="vm.orders='asc'" ng-if = "vm.orderProp != 'Time'" ng-model = "vm.orders">
+                                        <option value = "des">Descending</option>
+                                        <option value = "asc">Ascending</option>
+                                    </select>
+                                </span>
+                            </div>
+
+                            <div class = "col-md-4"></div>
+
+
+
+                        </div>
+                        <div>
+                            <div id = "table_l" class="table-responsive">
+                                <table class = "table table-striped" >
+                                    <tbody id = "fav_table">
+                                        <tr>
+                                            <th>Symbol</th>
+                                            <th>Stock Price</th>
+                                            <th>Change(Change Percent)</th>
+                                            <th>Volume</th>
+                                            <th>      </th>
+
+                                        </tr>
+                                        <tr ng-repeat="fav in vm.favorites | orderBy:vm.orderProp:true" ng-if = "vm.orders == 'des'" id = {{fav.Symbol}} >
+                                            <td>{{fav.Symbol}}</td>
+                                            <td>{{fav.Price | number:2}}</td>
+                                            <td ng-if="fav.Change>0" style="color:green;">
+                                                {{fav.Change | number:2}}({{fav.ChangeP | number:2}}%)<img src = "http://cs-server.usc.edu:45678/hw/hw8/images/Up.png" width="16px" height = "16px">
+                                            </td>
+                                            <td ng-if="fav.Change<0" style = "color:red;">
+                                               {{fav.Change | number:2}}({{fav.ChangeP | number : 2}}%)<img src = "http://cs-server.usc.edu:45678/hw/hw8/images/Down.png" width="16px" height = "16px">
+                                            </td>
+                                            <td ng-if="fav.Change==0">
+                                               {{fav.Change | number :2}}({{fav.ChangeP | number : 2}}%)
+                                            </td>
+                                            <td>{{fav.Volume | number}}</td>
+                                            <td><button type='button' class='btn btn-default' ng-click= "remove_fav(fav)"><span class='glyphicon glyphicon-trash'></span> </button></td>
+                                            
+
+                                        </tr>
+                                        <tr ng-repeat="fav in vm.favorites | orderBy:vm.orderProp" ng-if = "vm.orders == 'asc'"  id = {{fav.Symbol}} >
+                                            <td>{{fav.Symbol}}</td>
+                                            <td>{{fav.Price | number:2}}</td>
+                                            <td ng-if="fav.Change>0" style="color:green;">
+                                                {{fav.Change | number:2}}({{fav.ChangeP | number:2}}%)<img src = "http://cs-server.usc.edu:45678/hw/hw8/images/Up.png" width="16px" height = "16px">
+                                            </td>
+                                            <td ng-if="fav.Change<0" style = "color:red;">
+                                               {{fav.Change | number:2}}({{fav.ChangeP | number : 2}}%)<img src = "http://cs-server.usc.edu:45678/hw/hw8/images/Down.png" width="16px" height = "16px">
+                                            </td>
+                                            <td ng-if="fav.Change==0">
+                                               {{fav.Change | number :2}}({{fav.ChangeP | number : 2}}%)
+                                            </td>
+                                            <td>{{fav.Volume | number}}</td>
+                                            <td><button type='button' class='btn btn-default' ng-click= "remove_fav(fav)"><span class='glyphicon glyphicon-trash'></span> </button></td>
+                                            
+
+                                        </tr>
+                                        
+                                    </tbody>
+                                        
+                             
+                                    
+                                </table>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+
+
+
+
+        <div class = "container view-page view-2" ng-model = "hides"  id = "right_p" ng-hide = "!vm.current">
+            <div class = "well well-lg ">
+                <div class="panel panel-default">
+                    <div class="panel-heading row">
+                        <section class="pull-left">
+                            <a class="no-anchor" href="#" data-toggle="tooltip">
+                                <button type="button" class="btn btn-default grays" ng-click="change1(selectedItem)">                                                 
+                                   <span class="glyphicon glyphicon-chevron-left"></span>                                                 
+                                </button>
+                            </a>
+                        </section>
+                        
+                        <section class = "text-center" ><h4>Stock details </h4></section>
+                        
+                    </div>
+
+
+                    <div class="panel-body">
+
+
+
+
+                        <div class="row">
+                                <section class="col-md-8 col-lg-6 col-sm-10 col-xs-12">
+                                    <ul class="nav nav-pills hidden-xs">
+                                      <li class="active" ng-click="getQuote(selectedItem)"><a data-toggle="pill" href="#cur_stock" ><span class="glyphicon glyphicon-dashboard"></span> Current Stock</a></li>
+                                      <li><a data-toggle="pill" href="#his_chart" ng-click = "draw_his(selectedItem)"><span class="glyphicon glyphicon-signal"></span> Historical Charts</a></li>
+                                      <li><a data-toggle="pill" href="#news" ng-click = "draw_news(selectedItem)"><span class="glyphicon glyphicon-link"></span> News Feeds</a></li>
+                                    </ul>
+                                    <ul class="nav nav-pills visible-xs">
+                                      <li class="active"><a data-toggle="pill" href="#cur_stock"><span class="glyphicon glyphicon-dashboard"></span> Stock</a></li>
+                                      <li><a data-toggle="pill" href="#his_chart" ng-click = "draw_his(selectedItem)"><span class="glyphicon glyphicon-signal"></span> Charts</a></li>
+                                      <li><a data-toggle="pill" href="#news" ng-click = "draw_news(selectedItem)"><span class="glyphicon glyphicon-link"></span> News</a></li>
+                                    </ul>
+                                    
+                                </section>                              
+                        </div>
+
+                        <hr>
+                        <div class="row" >
+                                <div class="tab-content">
+                                        <div id="cur_stock" class="tab-pane fade active in">
+                                           
+                                                <div class="col-md-6 ">
+
+                                                    <div class = "col-md-6" id="current_stock_topl"><span class = "pull-left"><h4>Stock Details</h4></span>
+                                                    </div>
+                                                    <div id="starchange">
+                                                        <div class = "col-md-6"><span class = "pull-right"><button id = "fav_star" class ="btn btn-default grays" type="button" ng-click = "fav_star_fun()"><span id = "star" class = "glyphicon glyphicon-star-empty"></span></button></span><span class = "pull-right" ><button id = "face_bt" class ="btn btn-default grays" type="button" style="width: 40px;height: 34px;" ng-click = "share_fb()"><img src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png" style="width: 23px;height: 24px;"></button></span>
+                                                        </div>
+                                                    </div>
+                                               
+
+
+                                                    <div id="current_stock" class = "col-md-12" >
+                                                        <div class="progress">
+                                                            <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                                    
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 ">
+                                                    <div id="current_stock_topr">
+                                                        <ul class="nav nav-tabs"><li class="active" id = "Price" ><a href="#price_chart" data-toggle="tab">Price</a></li><li><a href="#sma_chart" id = "SMA" data-toggle="tab">SMA</a></li><li><a href="#ema_chart" id = "EMA"  data-toggle="tab">EMA</a></li><li><a href="#stoch_chart" id = "STOCH"  data-toggle="tab">STOCH</a></li><li><a href="#rsi_chart" id = "RSI" data-toggle="tab" >RSI</a></li><li><a href="#adx_chart" id = "ADX" data-toggle="tab"  >ADX</a></li><li><a href="#cci_chart" id = "CCI" data-toggle="tab"  >CCI</a></li><li><a href="#bbands_chart" id = "BBANDS" data-toggle="tab"  >BBANDS</a></li><li><a href="#macd_chart" id = "MACD" data-toggle="tab">MACD</a></li></ul>
+                                                        
+                                                    </div>
+
+                                                    <div id="chart_indi" class = "tab-content" >
+                                                        <div class="tab-pane fade in active" id="price_chart">
+                                                            <div class="progress progress_chart">
+                                                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                                    
+                                                                </div>
+
+                                                         
+                                                            </div>
+
+                                                            <div class="alert alert-danger alert_chart">
+                                                                <strong>Error! Failed to get price Chart.</strong> 
+                                                            </div>    
+
+
+                                                                <div id = "price_c" class = "c">
+
+                                                                    
+                                                                </div>
+                                                            
+                                                        </div>
+
+
+
+                                                        <div class="tab-pane fade" id="sma_chart">
+                                                            <div class="progress progress_chart">
+                                                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                                    
+                                                                </div>
+
+                                                               
+                                                            </div>
+
+                                                            <div class="alert alert-danger alert_chart">
+                                                                <strong>Error! Failed to get SMA Chart.</strong> 
+                                                            </div>
+
+                                                             <div id = "sma_c" class = "c">
+                                                    
+                                                                    
+                                                                </div>
+                                                            
+                                                        </div>
+
+                                                        <div class="tab-pane fade " id="ema_chart">
+                                                            <div class="progress progress_chart">
+                                                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                                    
+                                                                </div>
+
+                                                               
+                                                            </div>
+
+                                                             <div class="alert alert-danger alert_chart">
+                                                                <strong>Error! Failed to get EMA Chart.</strong> 
+                                                            </div>
+
+                                                             <div id = "ema_c" class = "c">
+                                                    
+                                                                    
+                                                                </div>
+                                                            
+                                                        </div>
+
+                                                        <div class="tab-pane fade " id="stoch_chart">
+                                                            <div class="progress progress_chart">
+                                                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                                    
+                                                                </div>
+
+                                                                
+                                                            </div>
+
+                                                             <div class="alert alert-danger alert_chart">
+                                                                <strong>Error! Failed to get STOCH Chart.</strong> 
+                                                            </div>
+
+                                                            <div id = "stoch_c" class = "c">
+                                                    
+                                                                    
+                                                                </div>
+                                                            
+                                                        </div>
+
+
+                                                         <div class="tab-pane fade " id="rsi_chart">
+                                                            <div class="progress progress_chart">
+                                                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                                    
+                                                                </div>
+
+                                                         
+                                                            </div>
+
+                                                             <div class="alert alert-danger alert_chart">
+                                                                <strong>Error! Failed to get RSI Chart.</strong> 
+                                                            </div>
+
+                                                                   <div id = "rsi_c" class = "c">
+                                                    
+                                                                    
+                                                                </div>
+                                                            
+                                                        </div>
+
+
+                                                         <div class="tab-pane fade " id="adx_chart">
+                                                            <div class="progress progress_chart">
+                                                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                                    
+                                                                </div>
+
+                                                             
+                                                            </div>
+
+                                                             <div class="alert alert-danger alert_chart">
+                                                                <strong>Error! Failed to get ADX Chart.</strong> 
+                                                            </div>
+
+                                                               <div id = "adx_c" class = "c">
+                                                    
+                                                                    
+                                                                </div>
+                                                            
+                                                        </div>
+
+
+                                                        <div class="tab-pane fade " id="cci_chart">
+                                                            <div class="progress progress_chart">
+                                                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                                    
+                                                                </div>
+
+                                                               
+                                                            </div>
+
+                                                             <div class="alert alert-danger alert_chart">
+                                                                <strong>Error! Failed to get CCI Chart.</strong> 
+                                                            </div>
+
+                                                             <div id = "cci_c" class = "c">
+                                                    
+                                                                    
+                                                                </div>
+                                                            
+                                                        </div>
+
+                                                         <div class="tab-pane fade " id="bbands_chart">
+                                                            <div class="progress progress_chart">
+                                                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                                    
+                                                                </div>
+
+                                                               
+                                                            </div>
+
+                                                             <div class="alert alert-danger alert_chart">
+                                                                <strong>Error! Failed to get BBANDS Chart.</strong> 
+                                                            </div>
+
+                                                             <div id = "bbands_c" class = "c">
+                                                    
+                                                                    
+                                                                </div>
+                                                            
+                                                        </div>
+
+                                                        <div class="tab-pane fade " id="macd_chart">
+                                                            <div class="progress progress_chart">
+                                                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                                    
+                                                                </div>
+
+                                                               
+                                                            </div>
+
+                                                             <div class="alert alert-dange alert_chart">
+                                                                <strong>Error! Failed to get MACD Chart.</strong> 
+                                                            </div>
+
+
+
+                                                             <div id = "macd_c" class = "c">
+                                                    
+                                                                    
+                                                                </div>
+                                                            
+                                                        </div>
+
+                                               
+                                                    </div>
+                                                    
+                                                </div>
+                                             </div>
+
+                                        <div id="his_chart" class="tab-pane fade">
+                                            <div class="progress" style = "margin:10px;">
+                                                  <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                                                    
+                                                  </div>
+                                                </div>
+
+                                                
+                                            <!-- <div id="chart_container" style="min-width:850px; height:500px;"></div> -->
+                                        </div>
+                                        <div id="news" class="tab-pane fade" >
+                                           
+                                                <div class="progress" style = "margin:10%;">
+                                                  <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                                                    
+                                                  </div>
+                                                </div>
+
+                                                  
+                                            
+                                        </div>
+
+
+                                    
+                                </div>
+                        
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                    
+            </div>
+
+                
+
+        </div>
+
+
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

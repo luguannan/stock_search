@@ -1,0 +1,133 @@
+body{
+
+    -webkit-overflow-scrolling: touch;
+    background-image: url("http://cs-server.usc.edu:45678/hw/hw8/images/background.png");
+
+}
+
+html,body{
+    overflow-x: hidden;
+}
+
+#input_l:after{
+    content:"*" ;
+    color:red; 
+
+}
+
+.well-lg{
+    
+
+    position: relative;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: white;
+
+
+
+
+}
+
+
+.grays {
+    border-style:solid;
+    border-color:rgb(206,206,206);
+    border-width:1px;
+}
+
+
+#line{
+    height: 30px;
+}
+
+#one_line {
+    height: 1px;
+    background-color: white;
+    position: relative;
+    margin-right: 15px;
+    margin-left: 15px;
+    margin-top: 15px;
+}
+
+
+.panel-heading {
+    padding-bottom: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 0;
+}
+
+#panel_heading_row {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+
+.checkbox{
+    margin-top: 0;
+    margin-left: 10px;
+}
+
+
+
+#tabel_l{
+
+    white-space: nowrap;
+    position: relative;
+}
+
+
+th{
+    margin-top: 10px;
+margin-left:5px;
+margin-right:5px;
+margin-bottom:0;
+    background-color: rgb(245,245,245);
+
+}
+
+.row{
+    margin-bottom: 10px;
+}
+
+
+.col-xs-12{
+    margin:5px;
+}
+
+
+md-autocomplete > md-autocomplete-wrap > md-progress-linear { display: none; }
+
+
+
+
+.view-page.ng-enter{
+
+    left:-50px;
+}
+.view-page.ng-enter.ng-enter-active{
+   
+    left:0px;
+}
+.view-page.ng-leave{
+
+    left:0px;
+}
+.view-page.ng-leave.ng-leave-active{
+
+      left:-50px;
+}
+
+.fast .toggle-group { transition: none; -webkit-transition: none; }
+
+.favor{
+    color:gold;
+}
+
+@media only screen and (min-width: 960px) {
+  .well-lg #line{
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+}
