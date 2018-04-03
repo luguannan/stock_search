@@ -58,7 +58,6 @@ angular
                 setTimeout(function(){
                     vm.draw_chart(sym,"BBANDS")},0);
             }
-
     }
         $scope.change1 = function(sym){
             
@@ -69,11 +68,7 @@ angular
 
             vm.current = !vm.current;
 
-
     }
-
-
-
         $scope.clear = function() {
           $scope.selectedItem = null;
           $scope.searchText = "";
@@ -90,17 +85,15 @@ angular
                 deferred.resolve(data);
  
             }).error(function(data) {
-                //console.log('Error: ' + data);
-                //todo
+                console.log('Error: ' + data);
+
             });
         return deferred.promise;
 
     }
 
         $scope.getQuote = function(j_symbol){
-            var prefix = "#price_chart > "
-
-            
+            var prefix = "#price_chart > "    
             var symbol = j_symbol["Symbol"];
 
             $(prefix+".alert_chart").css("display","none");
@@ -112,8 +105,6 @@ angular
             $(prefix+".alert_chart").css("display","none");
             $( prefix+ ".progress_chart").css("display","none");
             $(prefix+".c").css("display","block");
-
-
 
                 var list_data = data["Time Series (Daily)"];
                 var time_list = new Array();
@@ -179,30 +170,16 @@ angular
                             //console.log("yes");
                         }
                     }
-
-
-
                 }
-
-
-
-     
                 }).error(function(data) {
                     
                     $(prefix+".alert_chart").css("dispaly","block");
                     $(prefix+".progress_chart").css("dispaly","none");
                     $(prefix+".c").css("dispaly","none");
-           
-                    //todo
 
                 });
-
-
         }
-
-
-
-
+        
         function draw_price(symbol,j_symbol){
 
             console.log(symbol);
@@ -223,11 +200,8 @@ angular
                     datas.push(parseFloat(j_symbol['Time Series (Daily)'][datekeys[i]]['1. open']));
                     datasV.push(parseFloat(j_symbol['Time Series (Daily)'][datekeys[i]]['5. volume']));
                     x = datekeys[i].substring(5,7)+"/"+datekeys[i].substring(8,10);
-                    times.push(x);
-                    
+                    times.push(x);                
                 }
-   
-
                 var Chart = Highcharts.chart("price_c", {
                         title: {
                             text: tt
@@ -269,9 +243,6 @@ angular
                                     threshold: null
                                 }
                             },
-
-                            
-
                             series: [{
                                 type:'area',
                                 name: 'Stock Price',
@@ -288,14 +259,7 @@ angular
 
                     });
                 getChartAsPng(Chart);
-
-
-
-
         }
-
-
-
     $scope.draw_priceVolume = function (selected){
         var symbol = selected["Symbol"];
         $http.get('./stock.json',{params:{input:symbol}}).success(function (data) {
@@ -306,19 +270,12 @@ angular
 
         });
 
-
     }
-
-
-
-
 
     $scope.draw_news = function(selected){
         //$("cur_stock").empty();
         var symbol = selected["Symbol"];
         $http.get('./news.json',{params:{input:symbol}}).success(function (j_symbol) {
-
-
 
             var news_l = j_symbol.rss.channel[0]['item'];
            // console.log(news_l.length);
@@ -362,23 +319,11 @@ angular
                     
                     $("#news").append(news_html);
                 }
-                
-
             }
-
-
-
-
-
-
-
         }).error(function(data) {
+                console.log('Error: ' + data);
 
-
-                //console.log('Error: ' + data);
-                //todo
-        });
-             
+        });         
     }
 
     $scope.draw_his = function(selected){
@@ -396,10 +341,7 @@ angular
         var tt = symbol+' Stock Price';
         //var SeriesName = 'Stock Price';
         for(var i = 0; i<datekeys.length;i++){
-            //var x = "";
-            //console.log(j_symbol['Time Series (Daily)'][datekeys[i]]);
-                    
-
+                  
             dat = Date.UTC(datekeys[i].split("-")[0],datekeys[i].split("-")[1]-1,datekeys[i].split("-")[2],0,0,0,0);
             times.push(dat);
 /*
@@ -416,10 +358,7 @@ angular
         console.log(datas);
 
         //$("#his_chart").empty();
-        var chart = Highcharts.stockChart( 'his_chart', {
-
-
-           
+        var chart = Highcharts.stockChart( 'his_chart', {          
             rangeSelector : {
                 buttons : [{
                 type : 'day',
@@ -475,35 +414,13 @@ angular
             tooltip : {
                 valueDecimals : 2,
                 valuePrefix: "$"
-            },
-   
-            
+            },          
         }]
     });
-
-
-
-
-
     }).error(function(data) {
-
-
-                
+            console.log("error!")
         });
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     $scope.share_fb = function(){
 
@@ -518,8 +435,6 @@ angular
                     alert("Not posted");
                 }
             }); 
-
-
     }
 
     $scope.remove_fav = function(fav){
@@ -593,13 +508,10 @@ angular
             }
         }
 
-        }
-       
+        }      
 
     }
-    
-    
-    
+      
     function process_fav(symbol){
          if ($("#star").hasClass("fav")) {
             $("#star").addClass("glyphicon-star-empty");
@@ -621,20 +533,12 @@ angular
             $("#star").addClass("fav");
             $("#star").removeClass("glyphicon-star-empty");
 
-
-
-
             localStorage.setItem(symbol,JSON.stringify(addRow));
 
             console.log(addRow["Change"]);
 
-
         }
     }
-
-
-
-
 
     $scope.refresh = function(){
         //vm.favorites = [];
@@ -689,23 +593,13 @@ angular
   
                 }).error(function(data) {
                     console.log('Error: ' + data);
-                    //todo
+                    
                 });
                 //vm.favorites.push(JSON.parse(localStorage.getItem(localStorage.key(k))));
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
+    
     vm.draw_chart = function(selected,indi){
 
         var symbol = selected["Symbol"];
@@ -715,14 +609,11 @@ angular
             $(prefix+".alert_chart").css("display","none");
             $(prefix+".c").css("display","none");
             $(prefix+".progress_chart").css("display","block");
-
-
+        
         $http.get('./chart.json',{params:{input:symbol,indicator:indi}}).success(function (data) {
             $(prefix+".alert_chart").css("display","none");
             $( prefix+ ".progress_chart").css("display","none");
-            $(prefix+".c").css("display","block");
-
-           
+            $(prefix+".c").css("display","block");          
             var datekeys = new Array();
             var times = new Array();
             var datas = new Array();
@@ -736,8 +627,6 @@ angular
                 d = datekeys[i].substring(5,7)+"/"+datekeys[i].substring(8,10);
                 times.push(d);
             }
-
-
 try {
 
             if (indi == "STOCH") {
@@ -793,10 +682,6 @@ try {
 
                 });
                 getChartAsPng(Chart);
-
-                //Chart.addSeries();
-
-
             } 
             else if(indi == "BBANDS"){
                 var tl = data["Meta Data"]["2: Indicator"];
@@ -859,9 +744,6 @@ try {
 
                 getChartAsPng(Chart);
 
-                    //Chart.addSeries();
-               // Chart.addSeries();
-
             }else if (indi == "MACD"){
                 var tl = data["Meta Data"]["2: Indicator"];
                 var a = symbol +' MACD';
@@ -874,7 +756,7 @@ try {
                     datasS.push(parseFloat(data[t][datekeys[i]]["MACD_Hist"]));
                 }
 
-                            var Chart =    Highcharts.chart('macd_c', {
+                var Chart =    Highcharts.chart('macd_c', {
                     title: {
                         text: tl
                     },
@@ -920,11 +802,7 @@ try {
 
                 });
 
-                            getChartAsPng(Chart);
-                  //  Chart.addSeries();
-                //Chart.addSeries();
-
-
+                    getChartAsPng(Chart);
 
             }else {
                 if(indi == "SMA") var indica = "sma_c";
@@ -980,9 +858,6 @@ try {
                 });
                 getChartAsPng(Chart);
             }
-
-
-            //console.log('aa');
             
  } catch (e) {
     console.log(e);
@@ -996,39 +871,7 @@ try {
             $(prefix+".alert_chart").css("dispaly","block");
             $(prefix+".progress_chart").css("dispaly","none");
             $(prefix+".c").css("dispaly","none");
-           
 
-
-                //console.log('Error: ' + data);
-                //todo
         });
-
-
-
-
-
-
-
-
-
-      
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 });
